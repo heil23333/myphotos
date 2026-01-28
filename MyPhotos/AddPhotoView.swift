@@ -20,6 +20,8 @@ struct AddPhotoView: View {
         photoName.isEmpty || selectedImageData == nil
     }
     
+    let locationFetcher = LocationFetcher()
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -60,15 +62,19 @@ struct AddPhotoView: View {
                 
                 ToolbarItem(placement: .confirmationAction) {
                     Button("保存") {
-                        if let selectedImageData {
-                            let photo = Photo(name: photoName, photo: selectedImageData)
+                        if let location = locationFetcher.lastKnowLocation, let selectedImageData {
+                            let photo = Photo(name: photoName, photo: selectedImageData, latitude: location.latitude, longitude: location.longitude)
                             modelContext.insert(photo)
                         }
+                        
                         dismiss()
                     }
                     .disabled(disabled)
                 }
             }
+        }
+        .onAppear() {
+            locationFetcher.start()
         }
     }
     

@@ -14,9 +14,16 @@ class Photo: Identifiable, Hashable {
     var name: String
     @Attribute(.externalStorage) var photo: Data
     
-    init(id: UUID = UUID(), name: String, photo: Data) {
+    var latitude: Double?
+    var longitude: Double?
+    
+    var hasLocation: Bool { latitude != nil && longitude != nil }
+    
+    init(id: UUID = UUID(), name: String, photo: Data, latitude: Double?, longitude: Double?) {
         self.id = id
         self.name = name
         self.photo = photo
+        self.latitude = latitude
+        self.longitude = longitude
     }
 }

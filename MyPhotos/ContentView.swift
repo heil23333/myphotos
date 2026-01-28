@@ -13,6 +13,8 @@ struct ContentView: View {
     @Query(sort: [SortDescriptor<Photo>(\.name)]) var photos: [Photo]
     @State var showingAddPhoto: Bool = false
     
+    
+    
     var body: some View {
         NavigationStack {
             Group {
