@@ -19,26 +19,29 @@ struct ContentView: View {
                 if photos.isEmpty {
                     ContentUnavailableView("暂无照片", systemImage: "photo", description: Text("点击右上角添加"))
                 } else {
-                    List(photos) { photo in
-                        NavigationLink(value: photo) {
-                            HStack {
-                                Group {
-                                    if let uiImage = UIImage(data: photo.photo) {
-                                        Image(uiImage: uiImage)
-                                            .resizable()
-                                            .frame(width: 50, height: 50)
-                                            .scaledToFit()
-                                            .clipShape(.rect(cornerRadius: 8))
-                                            .padding()
-                                    } else {
-                                        ContentUnavailableView("图片显示错误", systemImage: "photo", description: Text(""))
+                    List() {
+                        ForEach(photos) { photo in
+                            NavigationLink(value: photo) {
+                                HStack {
+                                    Group {
+                                        if let uiImage = UIImage(data: photo.photo) {
+                                            Image(uiImage: uiImage)
+                                                .resizable()
+                                                .frame(width: 50, height: 50)
+                                                .scaledToFit()
+                                                .clipShape(.rect(cornerRadius: 8))
+                                                .padding()
+                                        } else {
+                                            ContentUnavailableView("图片显示错误", systemImage: "photo", description: Text(""))
+                                        }
                                     }
+                                    .frame(width: 50, height: 50)
+                                    
+                                    Text(photo.name)
                                 }
-                                .frame(width: 50, height: 50)
-                                
-                                Text(photo.name)
                             }
                         }
+                        .onDelete(perform: onDeletePhotos)
                     }
                 }
             }
@@ -58,6 +61,13 @@ struct ContentView: View {
                 }
         }
     }
+    func onDeletePhotos(offsets: IndexSet) {
+        offsets.forEach { index in
+            let photo = photos[index]
+            modelContext.delete(photo)
+        }
+    }
+    
 }
 
 #Preview {
